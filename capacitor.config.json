@@ -1,0 +1,8 @@
+{
+  "appId": "com.gestaodegastos.app",
+  "appName": "Gestao de Gastos",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

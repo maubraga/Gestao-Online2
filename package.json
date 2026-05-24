@@ -1,0 +1,21 @@
+{
+  "name": "gestao-de-gastos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "App web mobile-first para relatorios de despesas, reembolso, prestacao de contas e km.",
+  "scripts": {
+    "start": "node server.js",
+    "build": "node scripts/build-web.mjs",
+    "cap:sync": "npm.cmd run build && npx cap sync",
+    "cap:android": "npm.cmd run build && npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.2",
+    "@capacitor/cli": "^7.4.2",
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/filesystem": "^7.1.4",
+    "@capacitor/preferences": "^7.0.1",
+    "@capacitor/share": "^7.0.1",
+    "@supabase/supabase-js": "^2.105.4"
+  }
+}

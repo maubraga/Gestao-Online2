@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#08111f">
+  <title>Gestao de Gastos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/assets/branding/logo.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="appLoader" class="app-loader hidden" aria-live="polite" aria-hidden="true">
+    <div class="app-loader__panel">
+      <span class="app-loader__spinner" aria-hidden="true"></span>
+      <p id="appLoaderText">Carregando...</p>
+    </div>
+  </div>
+
+  <main class="app-shell">
+    <div class="app-device">
+      <section id="loginScreen" class="hero-card hero-card-compact">
+        <header class="setup-hero">
+          <div class="setup-hero__logo">
+            <img src="/assets/branding/logo.png" alt="Logo Gestao de Gastos">
+          </div>
+          <div class="setup-hero__copy">
+            <h1>Acesso <span>seguro</span></h1>
+            <p>Entre para acessar sua base de projetos</p>
+          </div>
+        </header>
+
+        <form id="loginForm" class="panel panel-setup">
+          <div class="setup-form">
+            <label class="field field-row">
+              <span class="field-row__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              <span class="field-row__body">
+                <span>Usuario</span>
+                <input id="loginUsername" name="loginUsername" type="text" autocomplete="username" placeholder="Digite seu usuario" required>
+              </span>
+            </label>
+
+            <label class="field field-row">
+              <span class="field-row__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M7 11V8a5 5 0 1 1 10 0v3" stroke="currentColor" stroke-width="1.8"/><path d="M6 11h12v9H6z" stroke="currentColor" stroke-width="1.8"/></svg>
+              </span>
+              <span class="field-row__body">
+                <span>Senha</span>
+                <input id="loginPassword" name="loginPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+              </span>
+            </label>
+
+            <p id="loginFeedback" class="login-feedback hidden"></p>
+
+            <div class="action-row">
+              <button id="loginButton" class="primary-button primary-button--hero" type="submit">Entrar</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <div id="appContent" class="hidden">
+        <section id="setupScreen" class="hero-card hero-card-compact">
+          <header class="setup-hero">
+            <div class="setup-hero__logo">
+              <img src="/assets/branding/logo.png" alt="Logo Gestao de Gastos">
+            </div>
+            <div class="setup-hero__copy">
+              <h1>Abrir <span>projeto</span></h1>
+              <p>Selecione um projeto para continuar</p>
+            </div>
+            <div class="session-bar">
+              <span id="sessionUserLabel">Conta ativa</span>
+              <button id="logoutButton" class="ghost-button session-bar__button" type="button">Sair</button>
+            </div>
+          </header>
+
+          <form id="reportSetupForm" class="panel panel-setup">
+            <div class="setup-form">
+              <label class="field field-row">
+                <span class="field-row__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 20a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
+                <span class="field-row__body">
+                  <span>Nome do Usuario</span>
+                  <input id="userName" name="userName" type="text" maxlength="80" placeholder="Digite seu nome" required>
+                </span>
+              </label>
+
+              <label class="field field-row">
+                <span class="field-row__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h8l4 4v12H7z" stroke="currentColor" stroke-width="1.8"/><path d="M15 4v4h4M10 12h6M10 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </span>
+                <span class="field-row__body">
+                  <span>Tipo do Relatorio</span>
+                  <select id="reportType" name="reportType" required>
+                    <option value="Reembolso">Reembolso</option>
+                    <option value="Prestacao de Contas">Prestacao de Contas</option>
+                    <option value="Km">Km</option>
+                  </select>
+                </span>
+              </label>
+
+              <label class="field field-row">
+                <span class="field-row__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M3 8h7l2 2h9v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="field-row__body">
+                  <span>Nome do Projeto</span>
+                  <input id="projectName" name="projectName" type="text" maxlength="100" placeholder="Digite o projeto" required>
+                </span>
+              </label>
+
+              <div class="action-row setup-actions">
+                <button id="setupSubmitButton" class="primary-button primary-button--hero" type="button">Salvar projeto</button>
+                <button id="openProjectButton" class="ghost-button" type="button">Abrir projeto</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="workspace" class="workspace hidden" aria-live="polite">
+          <div id="projectsScreen" class="screen-stack hidden">
+            <div class="screen-toolbar">
+              <button id="backToSetupButton" class="ghost-button screen-toolbar__button" type="button">Voltar</button>
+              <button id="projectsLogoutButton" class="ghost-button screen-toolbar__button" type="button">Sair</button>
+            </div>
+
+            <div id="projectsDirectory" class="screen-stack">
+              <div id="adminToggleWrap" class="hidden">
+                <button id="adminToggleButton" class="ghost-button" type="button">Usuarios</button>
+              </div>
+
+              <article id="adminPanel" class="panel panel-setup hidden">
+                <div class="panel-heading">
+                  <div>
+                    <p class="eyebrow">Admin</p>
+                    <h2>Usuarios do sistema</h2>
+                  </div>
+                </div>
+
+                <form id="adminUserForm" class="setup-form">
+                  <div class="grid-form">
+                    <label class="field">
+                      <span>Novo usuario</span>
+                      <input id="adminNewUsername" name="adminNewUsername" type="text" maxlength="40" placeholder="Digite o usuario" required>
+                    </label>
+
+                    <label class="field">
+                      <span>Senha</span>
+                      <input id="adminNewPassword" name="adminNewPassword" type="text" maxlength="80" placeholder="Digite a senha" required>
+                    </label>
+                  </div>
+
+                  <div class="action-row">
+                    <button id="adminCreateUserButton" class="primary-button" type="submit">Adicionar usuario</button>
+                  </div>
+                </form>
+
+                <p id="adminFeedback" class="login-feedback hidden"></p>
+
+                <div id="adminUsersList" class="saved-projects empty">
+                  <p>Nenhum usuario cadastrado.</p>
+                </div>
+              </article>
+
+              <article class="panel saved-projects-panel">
+                <div class="panel-heading">
+                  <div>
+                    <p class="eyebrow">Projetos</p>
+                    <h2>Projetos salvos</h2>
+                    <p class="panel-hint">Use o botao Abrir para carregar os itens do projeto.</p>
+                  </div>
+                </div>
+                <p id="projectFeedback" class="login-feedback login-feedback--success hidden"></p>
+                <div id="projectList" class="saved-projects empty">
+                  <p>Nenhum projeto salvo.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div id="projectWorkspaceContent" class="project-workspace hidden">
+            <div class="screen-toolbar">
+              <button id="backToProjectsButton" class="ghost-button screen-toolbar__button" type="button">Voltar</button>
+              <button id="detailLogoutButton" class="ghost-button screen-toolbar__button" type="button">Sair</button>
+            </div>
+
+            <article class="panel summary-panel">
+              <div class="summary-chip">
+                <p class="summary-label">Usuario</p>
+                <h2 id="summaryUser">-</h2>
+              </div>
+              <div class="summary-chip">
+                <p class="summary-label">Projeto</p>
+                <h3 id="summaryProject">-</h3>
+              </div>
+              <div class="summary-chip">
+                <p class="summary-label">Relatorio</p>
+                <h3 id="summaryType">-</h3>
+              </div>
+              <button id="changeSetupButton" class="ghost-button" type="button">Alterar dados</button>
+            </article>
+
+            <form id="entryForm" class="panel entry-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Novo item</h2>
+                </div>
+              </div>
+
+              <div class="grid-form">
+                <label class="field">
+                  <span>Data</span>
+                  <input id="entryDate" name="entryDate" type="date" required>
+                </label>
+
+                <label class="field">
+                  <span>Centro de Custo</span>
+                  <select id="entryCostCenter" name="entryCostCenter" required>
+                    <option value="Operacao">Operacao</option>
+                    <option value="Implantacao">Implantacao</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Descricao</span>
+                  <textarea id="entryDescription" name="entryDescription" rows="1" maxlength="300" placeholder="Detalhe da despesa ou trajeto" required></textarea>
+                </label>
+
+                <label class="field">
+                  <span>Valor</span>
+                  <input id="entryValue" name="entryValue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" required>
+                </label>
+
+                <label class="field field-readonly">
+                  <span>Categoria do relatorio</span>
+                  <input id="entryCategory" name="entryCategory" type="text" readonly>
+                </label>
+
+                <label class="field field-upload">
+                  <span>Comprovantes</span>
+                  <input id="entryReceipts" name="entryReceipts" type="file" accept="image/*,.pdf" multiple>
+                  <small>Use este campo para importar da galeria ou anexar PDF. Limite total: 10 MB por item.</small>
+                </label>
+              </div>
+
+              <div class="action-row compact-row">
+                <button id="openCameraButton" class="ghost-button" type="button">Abrir camera</button>
+              </div>
+
+              <p id="receiptFeedback" class="login-feedback hidden"></p>
+              <p id="entryFeedback" class="login-feedback hidden"></p>
+              <div id="receiptPreview" class="receipt-preview empty">
+                <p>Nenhum comprovante selecionado.</p>
+              </div>
+
+              <div class="action-row">
+                <button class="primary-button" type="submit">Adicionar item</button>
+                <button id="clearEntryButton" class="ghost-button" type="button">Limpar</button>
+              </div>
+            </form>
+
+            <section class="panel items-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Resumo</p>
+                  <h2>Itens do relatorio</h2>
+                </div>
+                <div class="totals">
+                  <span>Total</span>
+                  <strong id="totalValue">R$ 0,00</strong>
+                </div>
+              </div>
+
+              <div id="itemsList" class="items-list empty">
+                <p>Adicione pelo menos um item para liberar a exportacao.</p>
+              </div>
+
+              <div class="export-row">
+                <button id="downloadButton" class="primary-button" type="button" disabled>Baixar planilha XLSX</button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <section id="cameraModal" class="camera-modal hidden" aria-hidden="true">
+    <div class="camera-card">
+      <video id="cameraVideo" autoplay playsinline muted></video>
+      <canvas id="cameraCanvas" class="hidden"></canvas>
+      <div class="camera-actions">
+        <button id="capturePhotoButton" class="primary-button" type="button">Tirar foto</button>
+        <button id="closeCameraButton" class="ghost-button" type="button">Fechar</button>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
