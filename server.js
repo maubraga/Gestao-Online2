@@ -987,7 +987,10 @@ async function handleProjectsApi(req, res, url, user) {
   }
 
   if (req.method === "GET" && parts.length === 2) {
-    const db = await readProjectsDb(user.username);
+    let db = await readProjectsDb(user.username);
+    if (!db.projects.length) {
+      db = await readSeedProjectsDbLocal(user.username);
+    }
     const projects = db.projects
       .map(buildProjectSummary)
       .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
@@ -997,7 +1000,10 @@ async function handleProjectsApi(req, res, url, user) {
   }
 
   if (req.method === "GET" && parts.length === 3) {
-    const db = await readProjectsDb(user.username);
+    let db = await readProjectsDb(user.username);
+    if (!db.projects.length) {
+      db = await readSeedProjectsDbLocal(user.username);
+    }
     const project = db.projects.find((item) => item.id === projectId);
 
     if (!project) {
