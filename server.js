@@ -11,6 +11,7 @@ const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, "data");
 const USERS_DIR = path.join(DATA_DIR, "users");
 const SEED_USERS_DIR = path.join(DATA_DIR, "seed", "users");
+const ROOT_MAUBRAGA_SEED_FILE = path.join(ROOT, "seed-maubraga-projects.json");
 const LEGACY_PROJECTS_FILE = path.join(DATA_DIR, "projects.json");
 const ACCOUNTS_FILE = path.join(DATA_DIR, "accounts.json");
 
@@ -240,8 +241,24 @@ function getSeedUserFilePath(username) {
 }
 
 async function readSeedProjectsDbLocal(username) {
+  const seedCandidates = [getSeedUserFilePath(username)];
+  if (slugify(username) === "maubraga") {
+    seedCandidates.push(ROOT_MAUBRAGA_SEED_FILE);
+  }
+
+  for (const seedFile of seedCandidates) {
+    const db = await readProjectsDbFile(seedFile);
+    if (db.projects.length) {
+      return db;
+    }
+  }
+
+  return { projects: [] };
+}
+
+async function readProjectsDbFile(filePath) {
   try {
-    const raw = await fsp.readFile(getSeedUserFilePath(username), "utf8");
+    const raw = await fsp.readFile(filePath, "utf8");
     const parsed = JSON.parse(raw || '{"projects":[]}');
     const projects = Array.isArray(parsed.projects) ? parsed.projects : [];
 
