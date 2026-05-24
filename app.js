@@ -489,7 +489,35 @@ function syncCategoryField() {
 
 async function refreshProjects() {
   state.projects = await state.storage.listProjects();
+  if (!state.projects.length) {
+    await restoreSeedProjectsIfNeeded();
+    state.projects = await state.storage.listProjects();
+  }
   renderProjects();
+}
+
+async function restoreSeedProjectsIfNeeded() {
+  if (state.authUser?.username !== "maubraga") {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/seed-maubraga-projects.json?v=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) {
+      return;
+    }
+
+    const seedDb = await response.json();
+    const projects = Array.isArray(seedDb.projects) ? seedDb.projects.filter(isValidProjectRecord) : [];
+    for (const project of projects) {
+      await api("/api/projects", {
+        method: "POST",
+        body: project,
+      });
+    }
+  } catch (error) {
+    console.warn("Nao foi possivel restaurar os projetos iniciais.", error);
+  }
 }
 
 async function refreshAdminUsers() {
