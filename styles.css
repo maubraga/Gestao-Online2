@@ -187,6 +187,15 @@ button {
   filter: drop-shadow(0 14px 28px rgba(76, 255, 122, 0.08));
 }
 
+.setup-hero--project {
+  gap: 12px;
+  padding: 14px 14px 12px;
+}
+
+.setup-hero--project .setup-hero__logo img {
+  width: min(100%, 260px);
+}
+
 .setup-hero__copy {
   position: relative;
   z-index: 1;
@@ -936,6 +945,14 @@ h3 {
 
   .setup-hero__logo img {
     width: min(100%, 250px);
+  }
+
+  .setup-hero--project {
+    padding: 12px;
+  }
+
+  .setup-hero--project .setup-hero__logo img {
+    width: min(100%, 220px);
   }
 
   .setup-hero__copy h1 {
