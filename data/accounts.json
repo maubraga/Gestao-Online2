@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "username": "maubraga",
+      "password": "260781Mau@",
+      "displayName": "maubraga",
+      "role": "admin"
+    },
+    {
+      "username": "felipe",
+      "password": "bepass123",
+      "displayName": "Felipe",
+      "role": "user"
+    }
+  ]
+}
