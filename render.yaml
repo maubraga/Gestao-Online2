@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: gestao-de-gastos
+    name: gestao-online2
     runtime: node
     plan: free
     buildCommand: npm install
