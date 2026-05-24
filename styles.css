@@ -99,10 +99,10 @@ button {
 }
 
 .app-device {
-  width: min(100%, 760px);
+  width: min(100%, 430px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 18px 14px 36px;
+  padding: 14px 12px 28px;
   border-left: 1px solid rgba(76, 255, 122, 0.08);
   border-right: 1px solid rgba(76, 255, 122, 0.08);
   background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(2, 6, 2, 1));
@@ -136,10 +136,10 @@ button {
 .setup-hero {
   position: relative;
   display: grid;
-  gap: 18px;
+  gap: 14px;
   justify-items: center;
   text-align: center;
-  padding: 26px 22px 24px;
+  padding: 18px 16px 16px;
   border: 1px solid rgba(76, 255, 122, 0.22);
   background:
     radial-gradient(circle at 95% 0%, rgba(76, 255, 122, 0.12), transparent 22%),
@@ -181,7 +181,7 @@ button {
 
 .setup-hero__logo img {
   display: block;
-  width: min(100%, 520px);
+  width: min(100%, 300px);
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 14px 28px rgba(76, 255, 122, 0.08));
@@ -196,9 +196,9 @@ button {
 }
 
 .setup-hero__copy h1 {
-  font-size: clamp(2rem, 6vw, 3rem);
-  line-height: 0.98;
-  letter-spacing: -0.05em;
+  font-size: clamp(1.8rem, 9vw, 2.35rem);
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .setup-hero__copy h1 span {
@@ -244,9 +244,9 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(2.35rem, 11vw, 4.1rem);
-  line-height: 0.92;
-  letter-spacing: -0.06em;
+  font-size: clamp(2rem, 10vw, 3rem);
+  line-height: 1;
+  letter-spacing: 0;
   font-weight: 700;
 }
 
@@ -332,7 +332,7 @@ h3 {
 
 .setup-form {
   display: grid;
-  gap: 20px;
+  gap: 16px;
 }
 
 .login-feedback {
@@ -357,14 +357,14 @@ h3 {
 }
 
 .field-row {
-  grid-template-columns: 56px 1fr;
+  grid-template-columns: 48px 1fr;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .field-row__icon {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   color: var(--orange);
   border-color: rgba(76, 255, 122, 0.24);
   box-shadow: inset 0 0 16px rgba(76, 255, 122, 0.08);
@@ -372,8 +372,8 @@ h3 {
 
 .field-row__icon svg,
 .field-saved-projects__title svg {
-  width: 24px;
-  height: 24px;
+  width: 21px;
+  height: 21px;
 }
 
 .field-row__body {
@@ -407,7 +407,7 @@ h3 {
   border: 1px solid rgba(76, 255, 122, 0.14);
   background: linear-gradient(180deg, rgba(2, 8, 2, 0.92), rgba(0, 0, 0, 0.98));
   color: var(--text);
-  padding: 15px 14px;
+  padding: 13px 12px;
   outline: none;
   transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
@@ -614,7 +614,7 @@ h3 {
 }
 
 .primary-button--hero {
-  min-height: 70px;
+  min-height: 56px;
   border-color: rgba(76, 255, 122, 0.24);
   background: linear-gradient(90deg, #061106 0%, #0b1f0d 44%, #123617 100%);
   color: #8cffb0;
@@ -887,12 +887,76 @@ h3 {
 }
 
 @media (max-width: 720px) {
+  .app-device {
+    width: min(100%, 430px);
+    padding: 12px 10px 24px;
+  }
+
+  .hero-card {
+    min-height: auto;
+    align-content: start;
+  }
+
+  .panel-setup,
+  .entry-panel,
+  .items-panel,
+  .summary-panel {
+    padding: 16px;
+  }
+
+  .panel-setup {
+    padding: 16px 14px;
+  }
+
   .setup-hero {
-    padding: 22px 16px 20px;
+    padding: 16px 12px 14px;
   }
 
   .setup-hero__logo img {
-    width: min(100%, 420px);
+    width: min(100%, 250px);
+  }
+
+  .setup-hero__copy h1 {
+    font-size: clamp(1.65rem, 8vw, 2.1rem);
+  }
+
+  .setup-hero__copy p {
+    font-size: 0.9rem;
+  }
+
+  .field span {
+    font-size: 0.82rem;
+  }
+
+  .field-row {
+    grid-template-columns: 42px 1fr;
+    gap: 10px;
+  }
+
+  .field-row__icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .field-row__icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .field-row__body {
+    gap: 8px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 12px 11px;
+    font-size: 0.92rem;
+  }
+
+  .primary-button--hero {
+    min-height: 52px;
+    font-size: 0.96rem;
   }
 
   .summary-panel {
