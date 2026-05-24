@@ -10,6 +10,7 @@ const HOST = process.env.HOST || "0.0.0.0";
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, "data");
 const USERS_DIR = path.join(DATA_DIR, "users");
+const SEED_USERS_DIR = path.join(DATA_DIR, "seed", "users");
 const LEGACY_PROJECTS_FILE = path.join(DATA_DIR, "projects.json");
 const ACCOUNTS_FILE = path.join(DATA_DIR, "accounts.json");
 
@@ -234,6 +235,24 @@ function getUserFilePath(username) {
   return path.join(USERS_DIR, `${slugify(username)}.json`);
 }
 
+function getSeedUserFilePath(username) {
+  return path.join(SEED_USERS_DIR, `${slugify(username)}.json`);
+}
+
+async function readSeedProjectsDbLocal(username) {
+  try {
+    const raw = await fsp.readFile(getSeedUserFilePath(username), "utf8");
+    const parsed = JSON.parse(raw || '{"projects":[]}');
+    const projects = Array.isArray(parsed.projects) ? parsed.projects : [];
+
+    return {
+      projects: projects.map(sanitizeProjectRecord).filter(isValidProject),
+    };
+  } catch {
+    return { projects: [] };
+  }
+}
+
 async function ensureUserProjectsFile(username) {
   await fsp.mkdir(USERS_DIR, { recursive: true });
   const userFile = getUserFilePath(username);
@@ -242,9 +261,9 @@ async function ensureUserProjectsFile(username) {
     await fsp.access(userFile, fs.constants.F_OK);
     return userFile;
   } catch {
-    let initialDb = { projects: [] };
+    let initialDb = await readSeedProjectsDbLocal(username);
 
-    if (slugify(username) === "felipe") {
+    if (!initialDb.projects.length && slugify(username) === "felipe") {
       try {
         const legacyRaw = await fsp.readFile(LEGACY_PROJECTS_FILE, "utf8");
         const legacyParsed = JSON.parse(legacyRaw || '{"projects":[]}');
@@ -268,12 +287,21 @@ async function readProjectsDbLocal(username) {
     const raw = await fsp.readFile(userFile, "utf8");
     const parsed = JSON.parse(raw || '{"projects":[]}');
     const projects = Array.isArray(parsed.projects) ? parsed.projects : [];
-
-    return {
+    const db = {
       projects: projects.map(sanitizeProjectRecord).filter(isValidProject),
     };
+
+    if (!db.projects.length) {
+      const seedDb = await readSeedProjectsDbLocal(username);
+      if (seedDb.projects.length) {
+        await writeProjectsDbLocal(username, seedDb);
+        return seedDb;
+      }
+    }
+
+    return db;
   } catch {
-    return { projects: [] };
+    return readSeedProjectsDbLocal(username);
   }
 }
 
