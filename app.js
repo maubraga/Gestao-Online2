@@ -22,6 +22,7 @@ const state = {
   entries: [],
   projectCache: new Map(),
   storage: null,
+  isItemsListVisible: false,
 };
 
 const appLoader = document.querySelector("#appLoader");
@@ -68,6 +69,7 @@ const receiptFeedback = document.querySelector("#receiptFeedback");
 const entryFeedback = document.querySelector("#entryFeedback");
 const receiptPreview = document.querySelector("#receiptPreview");
 const itemsList = document.querySelector("#itemsList");
+const toggleItemsButton = document.querySelector("#toggleItemsButton");
 const totalValue = document.querySelector("#totalValue");
 const summaryUser = document.querySelector("#summaryUser");
 const summaryProject = document.querySelector("#summaryProject");
@@ -98,6 +100,7 @@ entryForm.addEventListener("submit", handleEntrySubmit);
 clearEntryButton.addEventListener("click", resetEntryForm);
 changeSetupButton.addEventListener("click", showSetup);
 downloadButton.addEventListener("click", handleDownload);
+toggleItemsButton.addEventListener("click", toggleItemsList);
 backToSetupButton.addEventListener("click", showSetupScreen);
 backToProjectsButton.addEventListener("click", showProjectsScreen);
 projectsLogoutButton.addEventListener("click", handleLogout);
@@ -661,6 +664,7 @@ async function loadProjectIntoForm(projectId) {
     state.reportType = project.reportType || "Reembolso";
     state.entries = Array.isArray(project.entries) ? project.entries : [];
     state.isEditingSetup = false;
+    state.isItemsListVisible = false;
 
     userNameInput.value = state.userName;
     projectNameInput.value = state.projectName;
@@ -670,7 +674,7 @@ async function loadProjectIntoForm(projectId) {
     openProjectButton.classList.remove("hidden");
     renderCurrentProject();
     showProjectDetailScreen();
-    setProjectFeedback(`Projeto ${state.projectName} aberto. Os itens estao logo abaixo.`, false);
+    setProjectFeedback(`Projeto ${state.projectName} aberto. Adicione seu item no formulario.`, false);
   } finally {
     setAppLoading(false);
   }
@@ -690,6 +694,7 @@ function clearCurrentProjectState() {
   state.projectId = "";
   state.isEditingSetup = false;
   state.entries = [];
+  state.isItemsListVisible = false;
   setEntryFeedback("");
   userNameInput.value = "";
   projectNameInput.value = "";
@@ -771,10 +776,17 @@ function renderEntries() {
   const total = state.entries.reduce((sum, entry) => sum + Number(entry.value || 0), 0);
   totalValue.textContent = currencyFormatter.format(total);
   downloadButton.disabled = state.entries.length === 0;
+  syncItemsToggleButton();
 
   if (!state.entries.length) {
     itemsList.className = "items-list empty";
     itemsList.innerHTML = "<p>Adicione pelo menos um item para liberar a exportacao.</p>";
+    return;
+  }
+
+  if (!state.isItemsListVisible) {
+    itemsList.className = "items-list items-list--collapsed";
+    itemsList.innerHTML = `<p>${state.entries.length} item(ns) no relatorio. Use Ver itens para consultar a lista.</p>`;
     return;
   }
 
@@ -795,6 +807,23 @@ function renderEntries() {
       }
     });
   });
+}
+
+function toggleItemsList() {
+  state.isItemsListVisible = !state.isItemsListVisible;
+  renderEntries();
+}
+
+function syncItemsToggleButton() {
+  if (!toggleItemsButton) {
+    return;
+  }
+
+  const count = state.entries.length;
+  toggleItemsButton.disabled = count === 0;
+  toggleItemsButton.textContent = state.isItemsListVisible
+    ? "Ocultar itens"
+    : `Ver itens${count ? ` (${count})` : ""}`;
 }
 
 function renderEntryCard(entry) {
@@ -1133,7 +1162,7 @@ async function openNativeCameraCapture() {
     input.addEventListener("change", () => {
       const files = Array.from(input.files || []);
       if (files.length) {
-        const appended = appendFilesToReceiptInput(files);
+        const appended = appendFilesToReceiptInput(renameCameraFiles(files));
         if (appended) {
           renderReceiptPreview();
         }
@@ -1163,7 +1192,7 @@ async function capturePhoto() {
 
   const nativePhotoBlob = await captureNativePhotoBlob();
   if (nativePhotoBlob) {
-    const file = new File([nativePhotoBlob], `comprovante-${Date.now()}.jpg`, { type: nativePhotoBlob.type || "image/jpeg" });
+    const file = new File([nativePhotoBlob], buildCameraFileName(nativePhotoBlob.type), { type: nativePhotoBlob.type || "image/jpeg" });
     const appended = appendFilesToReceiptInput([file]);
     if (appended) {
       renderReceiptPreview();
@@ -1190,7 +1219,7 @@ async function capturePhoto() {
     return;
   }
 
-  const file = new File([blob], `comprovante-${Date.now()}.jpg`, { type: "image/jpeg" });
+  const file = new File([blob], buildCameraFileName("image/jpeg"), { type: "image/jpeg" });
   const appended = appendFilesToReceiptInput([file]);
   if (appended) {
     renderReceiptPreview();
@@ -1298,6 +1327,31 @@ function appendFilesToReceiptInput(files) {
   receiptInput.files = transfer.files;
   setReceiptFeedback("");
   return true;
+}
+
+function buildCameraFileName(type = "image/jpeg", index = 0) {
+  const extension = String(type || "").includes("png") ? "png" : "jpg";
+  const now = new Date();
+  const date = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("-");
+  const time = [
+    String(now.getHours()).padStart(2, "0"),
+    String(now.getMinutes()).padStart(2, "0"),
+    String(now.getSeconds()).padStart(2, "0"),
+  ].join("");
+
+  const suffix = index > 0 ? `-${index + 1}` : "";
+  return `foto-${date}-${time}${suffix}.${extension}`;
+}
+
+function renameCameraFiles(files) {
+  return files.map((file, index) => {
+    const name = buildCameraFileName(file.type || "image/jpeg", index);
+    return new File([file], name, { type: file.type || "image/jpeg", lastModified: file.lastModified || Date.now() });
+  });
 }
 
 async function filesToReceiptData(files) {

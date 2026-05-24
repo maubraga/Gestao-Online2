@@ -406,19 +406,24 @@ h3 {
   width: 100%;
   border: 1px solid rgba(76, 255, 122, 0.14);
   background: linear-gradient(180deg, rgba(2, 8, 2, 0.92), rgba(0, 0, 0, 0.98));
-  color: var(--text);
+  color: #ffffff;
   padding: 13px 12px;
   outline: none;
   transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 
 .field select {
-  color: #7effa0;
+  color: #ffffff;
+}
+
+.field select option {
+  color: #ffffff;
+  background: #020802;
 }
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: #346844;
+  color: rgba(255, 255, 255, 0.46);
 }
 
 .field input:focus,
@@ -716,6 +721,9 @@ h3 {
 .receipt-name {
   font-size: 0.94rem;
   font-weight: 700;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .receipt-meta {
@@ -732,6 +740,7 @@ h3 {
 
 .action-row,
 .export-row,
+.items-toggle-row,
 .camera-actions {
   display: flex;
   gap: 12px;
@@ -785,8 +794,21 @@ h3 {
 
 .action-row > *,
 .export-row > *,
+.items-toggle-row > *,
 .camera-actions > * {
   flex: 1;
+}
+
+.items-toggle-row {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.items-list--collapsed {
+  padding: 14px;
+  border: 1px dashed rgba(76, 255, 122, 0.2);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.015);
 }
 
 .setup-actions > * {
